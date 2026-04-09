@@ -1,12 +1,65 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Mail, Github, Linkedin, Send, ArrowUpRight } from 'lucide-react';
 
 export const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const [sent, setSent] = useState(false);
+
+  const handleWhatsAppSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const text = `👋 Hello Sarfe Alam!
+
+📌 Name: ${formData.name}
+📧 Email: ${formData.email}
+
+💬 Message:
+${formData.message}`;
+
+    const encodedText = encodeURIComponent(text);
+
+    const phoneNumber = "917970486041"; // ✅ Your WhatsApp number with country code
+
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, "_blank");
+
+    setSent(true);
+
+    // Reset form
+    setFormData({
+      name: "",
+      email: "",
+      message: ""
+    });
+
+    // Hide success message after 3 sec
+    setTimeout(() => setSent(false), 3000);
+  };
+
   const socialLinks = [
-    { name: "LinkedIn", icon: <Linkedin className="w-6 h-6" />, href: "https://www.linkedin.com/in/sarfe-alam-92a213300/", color: "hover:text-blue-400" },
-    { name: "GitHub", icon: <Github className="w-6 h-6" />, href: "https://github.com/mdsarfealam62022-lab", color: "hover:text-white" },
-    { name: "Email", icon: <Mail className="w-6 h-6" />, href: "mailto:bhawanipurmauje@gmail.com", color: "hover:text-neon-cyan" }
+    {
+      name: "LinkedIn",
+      icon: <Linkedin className="w-6 h-6" />,
+      href: "https://www.linkedin.com/in/sarfe-alam-92a213300/",
+      color: "hover:text-blue-400"
+    },
+    {
+      name: "GitHub",
+      icon: <Github className="w-6 h-6" />,
+      href: "https://github.com/mdsarfealam62022-lab",
+      color: "hover:text-white"
+    },
+    {
+      name: "Email",
+      icon: <Mail className="w-6 h-6" />,
+      href: "mailto:bhawanipurmauje@gmail.com",
+      color: "hover:text-neon-cyan"
+    }
   ];
 
   return (
@@ -14,18 +67,17 @@ export const Contact: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 
-          {/* Left: Contact Info */}
+          {/* LEFT */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">
+            <h2 className="text-5xl md:text-7xl font-bold mb-8">
               Let's Build the <span className="text-neon-cyan">Future</span>
             </h2>
-            <p className="text-xl text-slate-400 max-w-xl mb-12 leading-relaxed tracking-wide">
-              Open for collaborations, research opportunities, and discussions on the intersection of AI and Civil Engineering.
+
+            <p className="text-xl text-slate-400 mb-12">
+              Open for collaborations, research, and AI + Civil Engineering projects.
             </p>
 
             <div className="flex flex-col gap-6">
@@ -33,14 +85,18 @@ export const Contact: React.FC = () => {
                 href="mailto:mdsarfe7970@gmail.com"
                 className="group flex items-center gap-6 p-6 glass rounded-2xl border border-white/5 hover:border-neon-cyan/30 transition-all w-fit"
               >
-                <div className="p-4 rounded-xl bg-neon-cyan/10 group-hover:bg-neon-cyan/20 transition-colors">
+                <div className="p-4 rounded-xl bg-neon-cyan/10">
                   <Mail className="w-8 h-8 text-neon-cyan" />
                 </div>
+
                 <div>
-                  <span className="text-sm text-slate-500 uppercase tracking-widest block mb-1">Email Me</span>
-                  <span className="text-xl font-bold text-white group-hover:text-neon-cyan transition-colors">Bhawanipurmauje@gmail.com</span>
+                  <span className="text-sm text-slate-500 block">Email Me</span>
+                  <span className="text-xl font-bold text-white">
+                    mdsarfe7970@gmail.com
+                  </span>
                 </div>
-                <ArrowUpRight className="w-6 h-6 text-slate-700 group-hover:text-neon-cyan transition-all" />
+
+                <ArrowUpRight className="w-6 h-6 text-slate-600" />
               </a>
 
               <div className="flex gap-4">
@@ -48,10 +104,9 @@ export const Contact: React.FC = () => {
                   <motion.a
                     key={index}
                     whileHover={{ y: -5, scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
                     href={link.href}
                     target="_blank"
-                    className={`p-5 rounded-2xl glass border border-white/5 transition-all text-slate-400 ${link.color}`}
+                    className={`p-5 rounded-2xl glass border border-white/5 text-slate-400 ${link.color}`}
                   >
                     {link.icon}
                   </motion.a>
@@ -60,48 +115,82 @@ export const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Right: Quick Contact Form (Visual) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="glass p-10 rounded-3xl border border-white/10 relative"
-          >
-            <div className="absolute -inset-1 bg-gradient-to-r from-neon-cyan to-neon-purple opacity-10 blur-xl rounded-3xl -z-10" />
+          {/* RIGHT FORM */}
+          <motion.div className="glass p-10 rounded-3xl border border-white/10">
+            <form className="space-y-6" onSubmit={handleWhatsAppSubmit}>
 
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Name</label>
-                  <input type="text" placeholder="Your Name" className="w-full p-4 rounded-xl bg-slate-900/50 border border-white/5 focus:border-neon-cyan/50 focus:outline-none transition-all text-white" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Email</label>
-                  <input type="email" placeholder="Your Email" className="w-full p-4 rounded-xl bg-slate-900/50 border border-white/5 focus:border-neon-cyan/50 focus:outline-none transition-all text-white" />
-                </div>
+              <div className="grid sm:grid-cols-2 gap-6">
+                <input
+                  type="text"
+                  required
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  className="p-4 rounded-xl bg-slate-900 border border-white/5 text-white"
+                />
+
+                <input
+                  type="email"
+                  required
+                  placeholder="Your Email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="p-4 rounded-xl bg-slate-900 border border-white/5 text-white"
+                />
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Message</label>
-                <textarea rows={4} placeholder="How can we collaborate?" className="w-full p-4 rounded-xl bg-slate-900/50 border border-white/5 focus:border-neon-cyan/50 focus:outline-none transition-all text-white resize-none" />
-              </div>
+
+              <textarea
+                rows={4}
+                required
+                placeholder="Your Message..."
+                value={formData.message}
+                onChange={(e) =>
+                  setFormData({ ...formData, message: e.target.value })
+                }
+                className="w-full p-4 rounded-xl bg-slate-900 border border-white/5 text-white"
+              />
+
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full py-5 bg-neon-cyan text-slate-950 font-bold rounded-xl shadow-lg shadow-neon-cyan/20 flex items-center justify-center gap-3 group"
+                type="submit"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full py-4 bg-neon-cyan text-black font-bold rounded-xl flex justify-center items-center gap-2"
               >
-                Send Message <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                Send Message <Send className="w-5 h-5" />
               </motion.button>
+
+              {/* SUCCESS MESSAGE */}
+              {sent && (
+                <p className="text-green-400 text-center text-sm">
+                  ✅ Redirecting to WhatsApp...
+                </p>
+              )}
             </form>
           </motion.div>
         </div>
 
-        <div className="mt-32 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <span className="text-2xl font-bold tracking-tighter">Sarfe <span className="text-neon-cyan">Alam</span></span>
-          <p className="text-slate-500 text-sm tracking-widest uppercase">© 2026 All Rights Reserved</p>
-          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-slate-500">
-            <a href="#" className="hover:text-neon-cyan transition-colors">Privacy</a>
-            <a href="#" className="hover:text-neon-cyan transition-colors">Terms</a>
+        {/* FOOTER */}
+        <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+
+          {/* Cursive Name */}
+          <span
+            className="text-sm"
+            style={{ fontFamily: "'Dancing Script', cursive" }}
+          >
+            Sarfe <span className="text-neon-cyan">Alam</span>
+          </span>
+
+          <p className="text-slate-500 text-xs">
+            © 2026 All Rights Reserved
+          </p>
+
+          <div className="flex gap-6 text-xs text-slate-500">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
           </div>
         </div>
       </div>
